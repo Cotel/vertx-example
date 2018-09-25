@@ -1,4 +1,4 @@
-package com.cotel.vertx-example
+package com.cotel.vertxExample
 
 import io.vertx.core.Vertx
 import io.vertx.junit5.Timeout

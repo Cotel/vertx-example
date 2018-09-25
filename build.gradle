@@ -40,7 +40,7 @@ version = '1.0.0-SNAPSHOT'
 sourceCompatibility = '1.8'
 mainClassName = 'io.vertx.core.Launcher'
 
-def mainVerticleName = 'com.cotel.vertx-example.MainVerticle'
+def mainVerticleName = 'com.cotel.vertxExample.MainVerticle'
 def watchForChange = 'src/**/*'
 def doOnChange = './gradlew classes'
 

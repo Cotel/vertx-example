@@ -1,4 +1,4 @@
-package com.cotel.vertx-example
+package com.cotel.vertxExample
 
 import io.vertx.core.AbstractVerticle
 import io.vertx.core.Future
@@ -18,7 +18,7 @@ class MainVerticle : AbstractVerticle() {
           startFuture.complete()
           println("HTTP server started on port 8080")
         } else {
-          startFuture.fail(http.cause());
+          startFuture.fail(http.cause())
         }
       }
 
