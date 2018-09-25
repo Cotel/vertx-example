@@ -13,6 +13,8 @@ class MainVerticle : AbstractVerticle() {
     val helloWorldController = HelloWorldController(router)
 
     server.requestHandler { router.accept(it) }.listen(8080)
+
+    startFuture.complete()
   }
 
 }
