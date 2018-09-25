@@ -23,6 +23,7 @@ plugins {
   id 'com.github.johnrengelman.shadow' version '2.0.4'
 }
 apply plugin: 'kotlin'
+apply plugin: 'kotlin-kapt'
 ext {
   kotlinVersion = '1.2.60'
   vertxVersion = '3.5.3'
