@@ -13,7 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import java.util.concurrent.TimeUnit
 
 @ExtendWith(VertxExtension::class)
-class HelloWorldControllerTest {
+class HelloWorldActionTest {
 
   @BeforeEach
   fun prepare(vertx: Vertx, testContext: VertxTestContext) {

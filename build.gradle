@@ -28,6 +28,7 @@ ext {
   kotlinVersion = '1.2.60'
   coroutinesVersion = '0.26.1'
   vertxVersion = '3.5.3'
+  arrowVersion = "0.7.2"
   junitJupiterEngineVersion = '5.2.0'
 }
 
@@ -52,6 +53,16 @@ dependencies {
   
   implementation "io.vertx:vertx-core:$vertxVersion"
   implementation "io.vertx:vertx-web:$vertxVersion"
+  
+  implementation "io.arrow-kt:arrow-core:$arrowVersion"
+  implementation "io.arrow-kt:arrow-syntax:$arrowVersion"
+  implementation "io.arrow-kt:arrow-typeclasses:$arrowVersion"
+  implementation "io.arrow-kt:arrow-data:$arrowVersion"
+  implementation "io.arrow-kt:arrow-instances-core:$arrowVersion"
+  implementation "io.arrow-kt:arrow-instances-data:$arrowVersion"
+  implementation "io.arrow-kt:arrow-effects:$arrowVersion"
+  implementation "io.arrow-kt:arrow-optics:$arrowVersion"
+  kapt    "io.arrow-kt:arrow-annotations-processor:$arrowVersion"
 
   testImplementation "io.vertx:vertx-junit5:$vertxVersion"
   testRuntime("org.junit.jupiter:junit-jupiter-engine:$junitJupiterEngineVersion")
