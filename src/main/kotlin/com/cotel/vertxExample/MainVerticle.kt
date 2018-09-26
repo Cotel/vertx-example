@@ -1,10 +1,7 @@
 package com.cotel.vertxExample
 
+import com.cotel.vertxExample.base.ServiceLocator
 import com.cotel.vertxExample.books.BooksController
-import com.cotel.vertxExample.books.storage.BooksDTO
-import com.cotel.vertxExample.books.usecases.AddBook
-import com.cotel.vertxExample.books.usecases.GetAllBooks
-import com.cotel.vertxExample.books.usecases.GetBookById
 import io.vertx.core.AbstractVerticle
 import io.vertx.core.Future
 import io.vertx.ext.web.Router
@@ -17,13 +14,11 @@ class MainVerticle : AbstractVerticle() {
     val router = Router.router(vertx)
       .apply { route().handler(BodyHandler.create()) }
 
-    val booksDTO = BooksDTO()
-    val getAllBooks = { GetAllBooks(booksDTO) }
-    val getBookById = { GetBookById(booksDTO) }
-    val addBook = { AddBook(booksDTO) }
+    ServiceLocator.prepare()
 
-    HelloWorldController(router)
-    BooksController(getAllBooks(), getBookById(), addBook(), router)
+    val helloController = HelloWorldController(router)
+    val booksController =
+      BooksController(ServiceLocator.retrieve(), ServiceLocator.retrieve(), ServiceLocator.retrieve(), router)
 
     server.requestHandler { router.accept(it) }.listen(8080)
 

@@ -8,7 +8,7 @@ import io.vertx.ext.web.RoutingContext
 interface Controller {
   fun <A> HttpServerResponse.endWithJson(
     entity: A,
-    statusCode: HttpResponseStatus = HttpResponseStatus.ACCEPTED
+    statusCode: HttpResponseStatus = HttpResponseStatus.OK
   ) {
     putHeader("content-type", "application/json; charset=utf-8")
       .setStatusCode(statusCode.code())
