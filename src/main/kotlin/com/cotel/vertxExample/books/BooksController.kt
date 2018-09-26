@@ -45,16 +45,17 @@ class BooksController(
         try {
           val id = request.getParam("id").toLong()
 
-          val book = getBookById.execute(id)
-
-          if (book != null) {
-            putHeader("content-type", "application/json; charset=utf-8")
-            end(Json.encodePrettily(book))
-          } else {
-            statusCode = 404
-            end("No Book was found with id $id")
-          }
-
+          getBookById.execute(id)
+            .fold(
+              {
+                statusCode = 404
+                end("No Book was found with id $id")
+              },
+              {
+                putHeader("content-type", "application/json; charset=utf-8")
+                end(Json.encodePrettily(it))
+              }
+            )
         } catch (ex: NumberFormatException) {
           statusCode = 400
           end("Param id must be a number")

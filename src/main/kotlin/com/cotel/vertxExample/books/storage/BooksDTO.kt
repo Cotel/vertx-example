@@ -1,5 +1,6 @@
 package com.cotel.vertxExample.books.storage
 
+import arrow.core.Option
 import com.cotel.vertxExample.books.model.Book
 import java.util.concurrent.atomic.AtomicLong
 
@@ -14,7 +15,7 @@ class BooksDTO {
 
   fun getAllBooks(): List<Book> = books
 
-  fun getBookById(id: Long): Book? = books.find { it.id == id }
+  fun getBookById(id: Long): Option<Book> = Option.fromNullable(books.find { it.id == id })
 
   fun addBook(book: Book) {
     val newId = lastId.incrementAndGet()

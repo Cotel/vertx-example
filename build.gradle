@@ -28,6 +28,7 @@ ext {
   kotlinVersion = '1.2.60'
   coroutinesVersion = '0.26.1'
   vertxVersion = '3.5.3'
+  arrowVersion = "0.7.2"
   junitJupiterEngineVersion = '5.2.0'
 }
 
@@ -52,6 +53,8 @@ dependencies {
   
   implementation "io.vertx:vertx-core:$vertxVersion"
   implementation "io.vertx:vertx-web:$vertxVersion"
+  
+  implementation "io.arrow-kt:arrow-core:$arrowVersion"
 
   testImplementation "io.vertx:vertx-junit5:$vertxVersion"
   testRuntime("org.junit.jupiter:junit-jupiter-engine:$junitJupiterEngineVersion")
