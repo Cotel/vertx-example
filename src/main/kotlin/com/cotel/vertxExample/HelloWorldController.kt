@@ -13,7 +13,7 @@ class HelloWorldController(router: Router) {
   private fun handleIndex(context: RoutingContext) {
     val response = context.response()
 
-    with (response) {
+    with(response) {
       putHeader("content-type", "text/plain")
       end("Hello world from Vertx!")
     }

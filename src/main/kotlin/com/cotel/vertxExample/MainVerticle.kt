@@ -18,8 +18,8 @@ class MainVerticle : AbstractVerticle() {
     val getAllBooks = { GetAllBooks(booksDTO) }
     val getBookById = { GetBookById(booksDTO) }
 
-    val helloWorldController = HelloWorldController(router)
-    val booksController = BooksController(getAllBooks(), getBookById(), router)
+    HelloWorldController(router)
+    BooksController(getAllBooks(), getBookById(), router)
 
     server.requestHandler { router.accept(it) }.listen(8080)
 

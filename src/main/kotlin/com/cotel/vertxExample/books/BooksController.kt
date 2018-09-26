@@ -2,10 +2,11 @@ package com.cotel.vertxExample.books
 
 import arrow.core.Try
 import arrow.core.recover
+import com.cotel.vertxExample.base.Controller
 import com.cotel.vertxExample.books.usecases.GetAllBooks
 import com.cotel.vertxExample.books.usecases.GetBookById
+import io.netty.handler.codec.http.HttpResponseStatus
 import io.vertx.core.http.HttpMethod
-import io.vertx.core.json.Json
 import io.vertx.ext.web.Router
 import io.vertx.ext.web.RoutingContext
 import kotlinx.coroutines.experimental.GlobalScope
@@ -15,7 +16,7 @@ class BooksController(
   private val getAllBooks: GetAllBooks,
   private val getBookById: GetBookById,
   router: Router
-) {
+) : Controller {
 
   init {
     with(router) {
@@ -31,8 +32,7 @@ class BooksController(
       with(response) {
         val books = getAllBooks.execute()
 
-        putHeader("content-type", "application/json; charset=utf-8")
-        end(Json.encodePrettily(books))
+        successResponse(books)
       }
     }
   }
@@ -43,25 +43,15 @@ class BooksController(
       val response = context.response()
 
       with(response) {
-        putHeader("content-type", "text/plain; charset=utf-8")
         Try {
           val id = request.getParam("id").toLong()
 
-          getBookById.execute(id)
-            .fold(
-              {
-                statusCode = 404
-                end("No Book was found with id $id")
-              },
-              {
-                putHeader("content-type", "application/json; charset=utf-8")
-                end(Json.encodePrettily(it))
-              }
-            )
-        }.recover {
-          statusCode = 400
-          end("Param id must be a number")
+          getBookById.execute(id).fold(
+            { errorResponse("Book not found with id $id", HttpResponseStatus.NOT_FOUND) },
+            { successResponse(it) }
+          )
         }
+          .recover { errorResponse("Param id must be a number") }
       }
     }
   }
