@@ -1,5 +1,6 @@
-package com.cotel.vertxExample
+package com.cotel.vertxExample.books
 
+import com.cotel.vertxExample.books.usecases.GetAllBooks
 import io.vertx.core.http.HttpMethod
 import io.vertx.core.json.Json
 import io.vertx.ext.web.Router

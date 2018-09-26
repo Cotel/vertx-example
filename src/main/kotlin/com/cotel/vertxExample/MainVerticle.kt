@@ -1,5 +1,8 @@
 package com.cotel.vertxExample
 
+import com.cotel.vertxExample.books.BooksController
+import com.cotel.vertxExample.books.storage.BooksDTO
+import com.cotel.vertxExample.books.usecases.GetAllBooks
 import io.vertx.core.AbstractVerticle
 import io.vertx.core.Future
 import io.vertx.ext.web.Router

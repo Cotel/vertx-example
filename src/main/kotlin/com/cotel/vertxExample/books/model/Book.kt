@@ -1,4 +1,4 @@
-package com.cotel.vertxExample
+package com.cotel.vertxExample.books.model
 
 data class Book(
   val id: Long = 0,

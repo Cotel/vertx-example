@@ -1,5 +1,6 @@
-package com.cotel.vertxExample
+package com.cotel.vertxExample.books.storage
 
+import com.cotel.vertxExample.books.model.Book
 import java.util.concurrent.atomic.AtomicLong
 
 class BooksDTO {
