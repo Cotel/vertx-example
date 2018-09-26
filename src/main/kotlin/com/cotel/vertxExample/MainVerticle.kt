@@ -10,7 +10,11 @@ class MainVerticle : AbstractVerticle() {
     val server = vertx.createHttpServer()
     val router = Router.router(vertx)
 
+    val booksDTO = BooksDTO()
+    val getAllBooks = { GetAllBooks(booksDTO) }
+
     val helloWorldController = HelloWorldController(router)
+    val booksController = BooksController(getAllBooks(), router)
 
     server.requestHandler { router.accept(it) }.listen(8080)
 

@@ -26,6 +26,7 @@ apply plugin: 'kotlin'
 apply plugin: 'kotlin-kapt'
 ext {
   kotlinVersion = '1.2.60'
+  coroutinesVersion = '0.26.1'
   vertxVersion = '3.5.3'
   junitJupiterEngineVersion = '5.2.0'
 }
@@ -47,7 +48,8 @@ def doOnChange = './gradlew classes'
 
 dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
-
+  implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+  
   implementation "io.vertx:vertx-core:$vertxVersion"
   implementation "io.vertx:vertx-web:$vertxVersion"
 
@@ -84,4 +86,9 @@ run {
 
 task wrapper(type: Wrapper) {
   gradleVersion = '4.6'
+}
+kotlin {
+  experimental {
+    coroutines "enable"
+  }
 }
