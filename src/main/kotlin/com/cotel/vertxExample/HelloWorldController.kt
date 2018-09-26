@@ -10,7 +10,7 @@ class HelloWorldController(router: Router) {
     router.route(HttpMethod.GET, "/hello").handler(::handleIndex)
   }
 
-  fun handleIndex(context: RoutingContext) {
+  private fun handleIndex(context: RoutingContext) {
     val response = context.response()
 
     with (response) {

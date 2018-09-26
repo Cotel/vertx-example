@@ -22,7 +22,7 @@ class BooksController(
     }
   }
 
-  fun handleIndex(context: RoutingContext) {
+  private fun handleIndex(context: RoutingContext) {
     GlobalScope.launch {
       val response = context.response()
 
@@ -35,7 +35,7 @@ class BooksController(
     }
   }
 
-  fun handleDetail(context: RoutingContext) {
+  private fun handleDetail(context: RoutingContext) {
     GlobalScope.launch {
       val request = context.request()
       val response = context.response()
