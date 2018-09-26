@@ -29,6 +29,7 @@ ext {
   coroutinesVersion = '0.26.1'
   vertxVersion = '3.5.3'
   arrowVersion = "0.7.2"
+  koinVersion = "1.0.1"
   junitJupiterEngineVersion = '5.2.0'
 }
 
@@ -41,7 +42,7 @@ group = 'com.cotel'
 version = '1.0.0-SNAPSHOT'
 
 sourceCompatibility = '1.8'
-mainClassName = 'io.vertx.core.Launcher'
+mainClassName = 'com.cotel.vertxExample.MainKt'
 
 def mainVerticleName = 'com.cotel.vertxExample.MainVerticle'
 def watchForChange = 'src/**/*'
@@ -50,11 +51,14 @@ def doOnChange = './gradlew classes'
 dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
   implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
-  
+
+  implementation "org.koin:koin-core:$koinVersion"
+  testImplementation "org.koin:koin-test:$koinVersion"
+
   implementation "io.vertx:vertx-core:$vertxVersion"
   implementation "io.vertx:vertx-web:$vertxVersion"
   implementation "io.vertx:vertx-lang-kotlin-coroutines:$vertxVersion"
-  
+
   implementation "io.arrow-kt:arrow-core:$arrowVersion"
 
   testImplementation "io.vertx:vertx-junit5:$vertxVersion"

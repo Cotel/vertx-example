@@ -4,28 +4,14 @@ import com.cotel.vertxExample.books.storage.BooksDTO
 import com.cotel.vertxExample.books.usecases.AddBook
 import com.cotel.vertxExample.books.usecases.GetAllBooks
 import com.cotel.vertxExample.books.usecases.GetBookById
+import org.koin.dsl.module.module
 
-object ServiceLocator {
+val mainModule = module {
 
-  val mutableMap: MutableMap<String, Any> = mutableMapOf()
+  single { BooksDTO() }
 
-  inline fun <reified T> bind(t: T) {
-    mutableMap[T::class.java.name] = t as Any
-  }
-
-  inline fun <reified T> factory(fn: () -> T) {
-    mutableMap[T::class.java.name] = fn() as Any
-  }
-
-  inline fun <reified T> retrieve(): T =
-    mutableMap[T::class.java.name] as T
-
-  fun prepare() {
-    bind(BooksDTO())
-
-    factory { GetAllBooks(retrieve()) }
-    factory { GetBookById(retrieve()) }
-    factory { AddBook(retrieve()) }
-  }
+  factory { GetAllBooks(get()) }
+  factory { GetBookById(get()) }
+  factory { AddBook(get()) }
 
 }

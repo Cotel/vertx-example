@@ -4,8 +4,9 @@ import io.netty.handler.codec.http.HttpResponseStatus
 import io.vertx.core.http.HttpServerResponse
 import io.vertx.core.json.Json
 import io.vertx.ext.web.RoutingContext
+import org.koin.standalone.KoinComponent
 
-interface Controller {
+interface Controller : KoinComponent {
   fun <A> HttpServerResponse.endWithJson(
     entity: A,
     statusCode: HttpResponseStatus = HttpResponseStatus.OK

@@ -17,13 +17,13 @@ import io.vertx.ext.web.RoutingContext
 import io.vertx.kotlin.coroutines.dispatcher
 import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.launch
+import org.koin.standalone.inject
 
-class BooksController(
-  private val getAllBooks: GetAllBooks,
-  private val getBookById: GetBookById,
-  private val addBook: AddBook,
-  router: Router
-) : Controller {
+class BooksController(router: Router) : Controller {
+
+  private val getAllBooks: GetAllBooks by inject()
+  private val getBookById: GetBookById by inject()
+  private val addBook: AddBook by inject()
 
   init {
     with(router) {
