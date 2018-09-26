@@ -1,9 +1,10 @@
 package com.cotel.vertxExample
 
-import com.cotel.vertxExample.books.BooksController
+import arrow.effects.IO
+import arrow.effects.applicativeError
+import com.cotel.vertxExample.books.actions.GetAllBooksAction
+import com.cotel.vertxExample.books.actions.GetBookByIdAction
 import com.cotel.vertxExample.books.storage.BooksDTO
-import com.cotel.vertxExample.books.usecases.GetAllBooks
-import com.cotel.vertxExample.books.usecases.GetBookById
 import io.vertx.core.AbstractVerticle
 import io.vertx.core.Future
 import io.vertx.core.http.HttpMethod
@@ -15,14 +16,15 @@ class MainVerticle : AbstractVerticle() {
     val server = vertx.createHttpServer()
     val router = Router.router(vertx)
 
-    val booksDTO = BooksDTO()
-    val getAllBooks = { GetAllBooks(booksDTO) }
-    val getBookById = { GetBookById(booksDTO) }
+    val booksDTO = BooksDTO(IO.applicativeError())
 
-    val helloWorldAction = HelloWorldAction()
+    val getAllBooksAction = GetAllBooksAction(booksDTO)
+    val getBookByIdAction = GetBookByIdAction(booksDTO)
 
-    router.route(HttpMethod.GET, "/hello").handler(helloWorldAction::handle)
-    val booksController = BooksController(getAllBooks(), getBookById(), router)
+    with(router) {
+      route(HttpMethod.GET, "/books").handler(getAllBooksAction::handle)
+      route(HttpMethod.GET, "/books/:id").handler(getBookByIdAction::handle)
+    }
 
     server.requestHandler { router.accept(it) }.listen(8080)
 
