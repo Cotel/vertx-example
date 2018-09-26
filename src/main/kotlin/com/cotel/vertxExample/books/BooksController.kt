@@ -1,5 +1,7 @@
 package com.cotel.vertxExample.books
 
+import arrow.core.Try
+import arrow.core.recover
 import com.cotel.vertxExample.books.usecases.GetAllBooks
 import com.cotel.vertxExample.books.usecases.GetBookById
 import io.vertx.core.http.HttpMethod
@@ -42,7 +44,7 @@ class BooksController(
 
       with(response) {
         putHeader("content-type", "text/plain; charset=utf-8")
-        try {
+        Try {
           val id = request.getParam("id").toLong()
 
           getBookById.execute(id)
@@ -56,7 +58,7 @@ class BooksController(
                 end(Json.encodePrettily(it))
               }
             )
-        } catch (ex: NumberFormatException) {
+        }.recover {
           statusCode = 400
           end("Param id must be a number")
         }
