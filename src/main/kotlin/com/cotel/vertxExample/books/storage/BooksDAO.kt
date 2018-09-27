@@ -8,7 +8,7 @@ import com.cotel.vertxExample.books.model.Book
 import com.cotel.vertxExample.books.model.StorageError
 import java.util.concurrent.atomic.AtomicLong
 
-class BooksDTO {
+class BooksDAO {
 
   private val lastId = AtomicLong(3)
   private val books = mutableListOf(

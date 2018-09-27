@@ -8,11 +8,11 @@ import com.cotel.vertxExample.books.model.AddBookErrors
 import com.cotel.vertxExample.books.model.AuthorIsEmpty
 import com.cotel.vertxExample.books.model.Book
 import com.cotel.vertxExample.books.model.TitleIsEmpty
-import com.cotel.vertxExample.books.storage.BooksDTO
+import com.cotel.vertxExample.books.storage.BooksDAO
 
-class AddBook(private val dto: BooksDTO) {
+class AddBook(private val DAO: BooksDAO) {
   fun execute(book: Book): Either<AddBookErrors, Book> = validate(book)
-    .flatMap { dto.addBook(it) }
+    .flatMap { DAO.addBook(it) }
 
   private fun validate(book: Book): Either<AddBookErrors, Book> = when {
     book.title.isEmpty() -> TitleIsEmpty.left()

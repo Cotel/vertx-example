@@ -3,7 +3,7 @@ package com.cotel.vertxExample.books
 import com.cotel.vertxExample.MainVerticle
 import com.cotel.vertxExample.base.mainModule
 import com.cotel.vertxExample.books.model.Book
-import com.cotel.vertxExample.books.storage.BooksDTO
+import com.cotel.vertxExample.books.storage.BooksDAO
 import io.mockk.every
 import io.mockk.mockk
 import io.vertx.core.Vertx
@@ -13,7 +13,6 @@ import io.vertx.junit5.VertxExtension
 import io.vertx.junit5.VertxTestContext
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -25,7 +24,7 @@ import java.util.concurrent.TimeUnit
 @ExtendWith(VertxExtension::class)
 class BooksControllerTest : KoinTest {
 
-  private val dto = mockk<BooksDTO>()
+  private val dao = mockk<BooksDAO>()
 
   @BeforeEach
   fun prepare(vertx: Vertx, testContext: VertxTestContext) {
@@ -37,9 +36,9 @@ class BooksControllerTest : KoinTest {
   @Timeout(value = 10, timeUnit = TimeUnit.SECONDS)
   @Throws(Throwable::class)
   fun `get index should return a list of books`(vertx: Vertx, testContext: VertxTestContext) {
-    declare { single(override = true) { dto } }
+    declare { single(override = true) { dao } }
 
-    every { dto.getAllBooks() } returns listOf(
+    every { dao.getAllBooks() } returns listOf(
       Book(101, "Test", "Test"),
       Book(1, "Test", "Test")
     )

@@ -1,13 +1,12 @@
 package com.cotel.vertxExample.books.usecases
 
 import arrow.core.Either
-import arrow.core.Left
 import arrow.core.right
 import com.cotel.vertxExample.books.model.AddBookErrors
 import com.cotel.vertxExample.books.model.AuthorIsEmpty
 import com.cotel.vertxExample.books.model.Book
 import com.cotel.vertxExample.books.model.TitleIsEmpty
-import com.cotel.vertxExample.books.storage.BooksDTO
+import com.cotel.vertxExample.books.storage.BooksDAO
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -15,7 +14,7 @@ import org.junit.jupiter.api.Test
 
 class AddBookTest {
 
-  private val dto = mockk<BooksDTO>(relaxed = true)
+  private val dto = mockk<BooksDAO>(relaxed = true)
 
   @Test
   fun `should return error if book title is empty`() {
