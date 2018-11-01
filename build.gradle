@@ -58,8 +58,14 @@ dependencies {
   implementation "io.vertx:vertx-core:$vertxVersion"
   implementation "io.vertx:vertx-web:$vertxVersion"
   implementation "io.vertx:vertx-lang-kotlin-coroutines:$vertxVersion"
+  implementation "io.vertx:vertx-jdbc-client:$vertxVersion"
+
+  implementation group: 'postgresql', name: 'postgresql', version: '9.0-801.jdbc4'
 
   implementation "io.arrow-kt:arrow-core:$arrowVersion"
+  implementation "io.arrow-kt:arrow-typeclasses:$arrowVersion"
+  implementation "io.arrow-kt:arrow-effects:$arrowVersion"
+  implementation "io.arrow-kt:arrow-effects-kotlinx-coroutines:$arrowVersion"
 
   testImplementation "io.vertx:vertx-junit5:$vertxVersion"
   testRuntime("org.junit.jupiter:junit-jupiter-engine:$junitJupiterEngineVersion")
