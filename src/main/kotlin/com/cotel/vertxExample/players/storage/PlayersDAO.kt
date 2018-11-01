@@ -15,13 +15,26 @@ class PlayersDAO<F>(
   A: Async<F>
 ) : Async<F> by A {
 
+  init {
+    dbClient.getConnection { ar ->
+      if (ar.failed()) {
+        System.err.println("CONNECTION TO DATABASE FAILED!!!!!")
+      } else {
+        ar.result().close()
+      }
+    }
+  }
+
   fun findUserById(id: String): Kind<F, Option<Player>> = async { callback ->
+    //language=PostgreSQL
     dbClient.queryWithParams("SELECT ID, NAME FROM PLAYER WHERE ID=?", json { listOf(id) }) { result ->
       if (result.failed()) {
+        System.err.println(result.cause())
         callback(Exception(result.cause()).left())
       } else {
         val resultSet = result.result()
         if (resultSet.rows.size == 1) {
+          //language=String
           val player = Player(resultSet.rows[0].getString("ID"), resultSet.rows[0].getString("NAME")).some()
           callback(player.right())
         } else {
@@ -29,8 +42,6 @@ class PlayersDAO<F>(
         }
       }
     }
-
-
   }
 
 }

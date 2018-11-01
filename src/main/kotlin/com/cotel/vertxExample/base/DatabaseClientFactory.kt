@@ -8,13 +8,37 @@ class DatabaseClientFactory {
   companion object {
 
     private const val URL = "url"
+    private const val USER = "user"
+    private const val PASSWORD = "password"
     private const val DRIVER = "driver_class"
-    private const val MAX_POOL_SIZE = "max_pool_size-loop"
 
-    fun createClient(vertx: Vertx): JDBCClient = JDBCClient.createShared(vertx, JsonObject(mapOf(
-      URL to "jdbc:postgresql",
-      DRIVER to "org.postgresql.Driver",
-      MAX_POOL_SIZE to 30
+    fun createClient(vertx: Vertx): JDBCClient = JDBCClient.createNonShared(vertx, JsonObject(mapOf(
+      URL to "jdbc:postgresql://bollapp-db:5432/bollapp",
+      USER to "postgres",
+      PASSWORD to "bollApp123",
+      DRIVER to "org.postgresql.Driver"
     )))
   }
 }
+
+// Player table DDL
+
+/*
+create table player
+(
+	id varchar not null
+		constraint player_pkey
+			primary key,
+	name varchar(50) not null
+)
+;
+
+alter table player owner to postgres
+;
+
+create unique index player_id_uindex
+	on player (id)
+;
+
+
+ */

@@ -60,7 +60,7 @@ dependencies {
   implementation "io.vertx:vertx-lang-kotlin-coroutines:$vertxVersion"
   implementation "io.vertx:vertx-jdbc-client:$vertxVersion"
 
-  implementation group: 'postgresql', name: 'postgresql', version: '9.0-801.jdbc4'
+  implementation "org.postgresql:postgresql:42.2.5"
 
   implementation "io.arrow-kt:arrow-core:$arrowVersion"
   implementation "io.arrow-kt:arrow-typeclasses:$arrowVersion"
