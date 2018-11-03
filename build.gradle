@@ -15,12 +15,14 @@ buildscript {
 
   dependencies {
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    classpath "org.postgresql:postgresql:42.2.5"
   }
 }
 plugins {
   id 'java'
   id 'application'
   id 'com.github.johnrengelman.shadow' version '2.0.4'
+  id "org.flywaydb.flyway" version "5.2.1"
 }
 apply plugin: 'kotlin'
 apply plugin: 'kotlin-kapt'
@@ -47,6 +49,12 @@ mainClassName = 'com.cotel.vertxExample.MainKt'
 def mainVerticleName = 'com.cotel.vertxExample.MainVerticle'
 def watchForChange = 'src/**/*'
 def doOnChange = './gradlew classes'
+
+flyway {
+  url = "jdbc:postgresql://localhost:5432/bollapp"
+  user = "postgres"
+  password = "bollApp123"
+}
 
 dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"

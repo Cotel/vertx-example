@@ -20,25 +20,3 @@ class DatabaseClientFactory {
     )))
   }
 }
-
-// Player table DDL
-
-/*
-create table player
-(
-	id varchar not null
-		constraint player_pkey
-			primary key,
-	name varchar(50) not null
-)
-;
-
-alter table player owner to postgres
-;
-
-create unique index player_id_uindex
-	on player (id)
-;
-
-
- */
