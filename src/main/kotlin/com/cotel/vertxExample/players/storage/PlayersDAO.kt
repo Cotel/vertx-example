@@ -27,7 +27,7 @@ class PlayersDAO<F>(
 
   fun findUserById(id: String): Kind<F, Option<Player>> = async { callback ->
     //language=PostgreSQL
-    dbClient.queryWithParams("SELECT ID, NAME FROM PLAYER WHERE ID=?", json { listOf(id) }) { result ->
+    dbClient.queryWithParams("SELECT id, name FROM player WHERE id=?", json { listOf(id) }) { result ->
       if (result.failed()) {
         System.err.println(result.cause())
         callback(Exception(result.cause()).left())
@@ -35,7 +35,7 @@ class PlayersDAO<F>(
         val resultSet = result.result()
         if (resultSet.rows.size == 1) {
           //language=String
-          val player = Player(resultSet.rows[0].getString("ID"), resultSet.rows[0].getString("NAME")).some()
+          val player = Player(resultSet.rows[0].getString("id"), resultSet.rows[0].getString("name")).some()
           callback(player.right())
         } else {
           callback(Option.empty<Player>().right())

@@ -8,6 +8,8 @@ import com.cotel.vertxExample.books.storage.BooksDAO
 import com.cotel.vertxExample.books.usecases.AddBook
 import com.cotel.vertxExample.books.usecases.GetAllBooks
 import com.cotel.vertxExample.books.usecases.GetBookById
+import com.cotel.vertxExample.match.storage.MatchDAO
+import com.cotel.vertxExample.match.usecases.FindMatchById
 import com.cotel.vertxExample.players.storage.PlayersDAO
 import com.cotel.vertxExample.players.usecases.FindPlayerById
 import io.vertx.core.Vertx
@@ -24,6 +26,12 @@ val mainModule = { vertx: Vertx ->
       single { PlayersDAO<ForDeferredK>(get(), DeferredK.async()) }
 
       factory { FindPlayerById<ForDeferredK>(get(), DeferredK.applicativeError()) }
+    }
+
+    module("matches") {
+      single { MatchDAO<ForDeferredK>(get(), DeferredK.async()) }
+
+      factory { FindMatchById<ForDeferredK>(get(), DeferredK.applicativeError()) }
     }
   }
 }

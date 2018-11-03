@@ -7,7 +7,7 @@
 
 # Get Player details by id
 
-GET http://localhost:8080/players/1
+GET http://localhost:8080/players/test1
 Accept: application/json
 
 ###
