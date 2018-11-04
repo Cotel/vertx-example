@@ -9,6 +9,7 @@ import arrow.effects.typeclasses.Async
 import com.cotel.vertxExample.base.json
 import com.cotel.vertxExample.match.model.CreateMatchRequest
 import com.cotel.vertxExample.match.model.Match
+import com.cotel.vertxExample.match.model.Round
 import com.cotel.vertxExample.players.model.Player
 import io.vertx.ext.jdbc.JDBCClient
 import java.util.UUID
@@ -36,13 +37,42 @@ class MatchDAO<F>(
         } else {
           //language=String
           val players = resultSet.rows.map { Player(it.getString("id"), it.getString("name")) }
-          callback(Match(
-            id,
-            resultSet.rows.first().getLong("starting_date"),
-            resultSet.rows.first().getLong("ending_date"),
-            players,
-            emptyList()
-          ).some().right())
+          val startingDate = resultSet.rows.first().getLong("starting_date")
+          val endingDate = resultSet.rows.first().getLong("ending_date")
+
+          //language=PostgreSQL
+          dbClient.queryWithParams("""
+            SELECT round.id, round.left_player_id, round.right_player_id, round.left_score, round.right_score, round.is_draw, round.is_left_bollo, round.is_right_bollo
+            FROM round LEFT JOIN match ON match.id = round.match_id
+            WHERE match.id = ?
+          """.trimIndent(), json { listOf(id) }) { result ->
+            if (result.failed()) callback(Exception(result.cause()).left())
+            else {
+              val resultSet = result.result()
+              //language=String
+              val rounds = resultSet.rows.map { row ->
+                Round(
+                  row.getString("id"),
+                  id,
+                  players.first { it.id == row.getString("left_player_id") },
+                  players.first { it.id == row.getString("right_player_id") },
+                  row.getInteger("left_score"),
+                  row.getInteger("right_score"),
+                  row.getBoolean("is_draw"),
+                  row.getBoolean("is_left_bollo"),
+                  row.getBoolean("is_right_bollo")
+                )
+              }
+
+              callback(Match(
+                id,
+                startingDate,
+                endingDate,
+                players,
+                rounds
+              ).some().right())
+            }
+          }
         }
       }
     }
