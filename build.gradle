@@ -5,16 +5,12 @@
  * Learn how to create Gradle builds at https://guides.gradle.org/creating-new-gradle-builds/
  */
 buildscript {
-  ext {
-    kotlinVersion = '1.2.60'
-  }
-
   repositories {
     mavenCentral()
   }
 
   dependencies {
-    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.2.60"
     classpath "org.postgresql:postgresql:42.2.5"
   }
 }
@@ -29,8 +25,8 @@ apply plugin: 'kotlin-kapt'
 ext {
   kotlinVersion = '1.2.60'
   coroutinesVersion = '0.26.1'
-  vertxVersion = '3.5.3'
-  arrowVersion = "0.7.2"
+  vertxVersion = '3.5.4'
+  arrowVersion = "0.7.3"
   koinVersion = "1.0.1"
   junitJupiterEngineVersion = '5.2.0'
 }
@@ -72,8 +68,12 @@ dependencies {
 
   implementation "io.arrow-kt:arrow-core:$arrowVersion"
   implementation "io.arrow-kt:arrow-typeclasses:$arrowVersion"
+  implementation "io.arrow-kt:arrow-data:$arrowVersion"
   implementation "io.arrow-kt:arrow-effects:$arrowVersion"
   implementation "io.arrow-kt:arrow-effects-kotlinx-coroutines:$arrowVersion"
+
+  implementation "io.arrow-kt:arrow-instances-core:$arrowVersion"
+  implementation "io.arrow-kt:arrow-instances-data:$arrowVersion"
 
   testImplementation "io.vertx:vertx-junit5:$vertxVersion"
   testRuntime("org.junit.jupiter:junit-jupiter-engine:$junitJupiterEngineVersion")

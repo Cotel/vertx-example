@@ -25,6 +25,9 @@ interface Controller : KoinComponent {
       .end(msg)
   }
 
+  fun HttpServerResponse.endWithBadRequestError(msg: String) =
+    endWithError(msg, HttpResponseStatus.BAD_REQUEST)
+
   fun HttpServerResponse.endWithInternalServerError(msg: String) =
     endWithError(msg, HttpResponseStatus.INTERNAL_SERVER_ERROR)
 

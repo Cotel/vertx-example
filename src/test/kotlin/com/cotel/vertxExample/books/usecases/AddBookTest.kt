@@ -25,7 +25,7 @@ class AddBookTest {
     val result = addBook.execute(Book())
 
     assertTrue(result.isLeft())
-    assertTrue((result as Either.Left<AddBookErrors, Book>).a == TitleIsEmpty)
+    assertTrue((result as Either.Left<AddBookErrors>).a == TitleIsEmpty)
   }
 
   @Test
@@ -37,7 +37,7 @@ class AddBookTest {
     val result = addBook.execute(Book(title = "Test"))
 
     assertTrue(result.isLeft())
-    assertTrue((result as Either.Left<AddBookErrors, Book>).a == AuthorIsEmpty)
+    assertTrue((result as Either.Left<AddBookErrors>).a == AuthorIsEmpty)
   }
 
   @Test

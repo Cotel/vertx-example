@@ -5,9 +5,9 @@
 # * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
 # * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
 
-# Get Player details by id
+# Get Match details by id
 
-GET http://localhost:8080/players/e8b3b7e8-3cb3-4d9b-9955-11992b0279cb
+GET http://localhost:8080/matches/test1
 Accept: application/json
 
 ###

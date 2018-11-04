@@ -4,11 +4,13 @@ import arrow.effects.DeferredK
 import arrow.effects.ForDeferredK
 import arrow.effects.applicativeError
 import arrow.effects.async
+import arrow.effects.monadError
 import com.cotel.vertxExample.books.storage.BooksDAO
 import com.cotel.vertxExample.books.usecases.AddBook
 import com.cotel.vertxExample.books.usecases.GetAllBooks
 import com.cotel.vertxExample.books.usecases.GetBookById
 import com.cotel.vertxExample.match.storage.MatchDAO
+import com.cotel.vertxExample.match.usecases.CreateMatch
 import com.cotel.vertxExample.match.usecases.FindMatchById
 import com.cotel.vertxExample.players.storage.PlayersDAO
 import com.cotel.vertxExample.players.usecases.FindPlayerById
@@ -22,16 +24,18 @@ val mainModule = { vertx: Vertx ->
     val dbClient: JDBCClient = DatabaseClientFactory.createClient(vertx)
     single { dbClient }
 
-    module("players") {
+    module("persistence") {
       single { PlayersDAO<ForDeferredK>(get(), DeferredK.async()) }
-
-      factory { FindPlayerById<ForDeferredK>(get(), DeferredK.applicativeError()) }
-    }
-
-    module("matches") {
       single { MatchDAO<ForDeferredK>(get(), DeferredK.async()) }
 
-      factory { FindMatchById<ForDeferredK>(get(), DeferredK.applicativeError()) }
+      module("players") {
+        factory { FindPlayerById<ForDeferredK>(get(), DeferredK.applicativeError()) }
+      }
+
+      module("matches") {
+        factory { FindMatchById<ForDeferredK>(get(), DeferredK.applicativeError()) }
+        factory { CreateMatch<ForDeferredK>(get(), get(), DeferredK.monadError()) }
+      }
     }
   }
 }

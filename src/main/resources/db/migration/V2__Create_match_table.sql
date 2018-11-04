@@ -3,8 +3,8 @@ create table match
 	id varchar not null
 		constraint match_pkey
 			primary key,
-	starting_date integer not null,
-	ending_date integer default 0
+	starting_date bigint not null,
+	ending_date bigint default 0
 )
 ;
 
