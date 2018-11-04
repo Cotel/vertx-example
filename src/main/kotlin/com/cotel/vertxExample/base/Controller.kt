@@ -24,6 +24,15 @@ interface Controller : KoinComponent {
       .setStatusCode(statusCode.code())
       .end(msg)
   }
+
+  fun HttpServerResponse.endWithBadRequestError(msg: String) =
+    endWithError(msg, HttpResponseStatus.BAD_REQUEST)
+
+  fun HttpServerResponse.endWithInternalServerError(msg: String) =
+    endWithError(msg, HttpResponseStatus.INTERNAL_SERVER_ERROR)
+
+  fun HttpServerResponse.endWithNotFoundError(msg: String) =
+    endWithError(msg, HttpResponseStatus.NOT_FOUND)
 }
 
 inline fun <reified A> RoutingContext.bodyAsJson(): A {

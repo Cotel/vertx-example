@@ -1,0 +1,21 @@
+# For a quick start check out our HTTP Requests collection (Tools|HTTP Client|Open HTTP Requests Collection).
+#
+# Following HTTP Request Live Templates are available:
+# * 'gtrp' and 'gtr' create a GET request with or without query parameters;
+# * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
+# * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
+
+POST http://localhost:8080/matches/521cb1db-85e3-492c-9bfa-84bb41630676/rounds
+Accept: application/json
+
+{
+  "leftPlayerId": "e8b3b7e8-3cb3-4d9b-9955-11992b0279cb",
+  "rightPlayerId": "aa71ba28-997f-4e38-95b5-e167307eb2a6",
+  "leftScore": 4,
+  "rightScore": 4,
+  "draw": "true",
+  "leftBollo": "false",
+  "rightBollo": "false"
+}
+
+###

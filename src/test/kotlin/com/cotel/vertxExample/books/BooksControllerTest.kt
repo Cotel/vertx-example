@@ -1,6 +1,7 @@
 package com.cotel.vertxExample.books
 
 import com.cotel.vertxExample.MainVerticle
+import com.cotel.vertxExample.base.booksModule
 import com.cotel.vertxExample.base.mainModule
 import com.cotel.vertxExample.books.model.Book
 import com.cotel.vertxExample.books.storage.BooksDAO
@@ -28,7 +29,7 @@ class BooksControllerTest : KoinTest {
 
   @BeforeEach
   fun prepare(vertx: Vertx, testContext: VertxTestContext) {
-    startKoin(listOf(mainModule))
+    startKoin(listOf(booksModule))
     vertx.deployVerticle(MainVerticle(), testContext.succeeding { testContext.completeNow() })
   }
 

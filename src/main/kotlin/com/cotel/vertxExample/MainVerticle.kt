@@ -1,6 +1,8 @@
 package com.cotel.vertxExample
 
 import com.cotel.vertxExample.books.BooksController
+import com.cotel.vertxExample.match.MatchController
+import com.cotel.vertxExample.players.PlayerController
 import io.vertx.core.AbstractVerticle
 import io.vertx.core.Future
 import io.vertx.ext.web.Router
@@ -15,6 +17,8 @@ class MainVerticle : AbstractVerticle() {
 
     val helloController = HelloWorldController(router)
     val booksController = BooksController(router)
+    val playerController = PlayerController(router)
+    val matchController = MatchController(router)
 
     server.requestHandler { router.accept(it) }.listen(8080)
 
