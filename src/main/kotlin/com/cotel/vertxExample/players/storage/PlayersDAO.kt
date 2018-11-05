@@ -25,6 +25,20 @@ class PlayersDAO<F>(
     }
   }
 
+  fun getAllPlayers(): Kind<F, List<Player>> = async { callback ->
+    dbClient.query("SELECT id, name FROM player") { result ->
+      if (result.failed()) callback(Exception(result.cause()).left())
+      else {
+        val resultSet = result.result()
+        if (resultSet.rows.isEmpty()) callback(emptyList<Player>().right())
+        else {
+          val players = resultSet.rows.map { Player(it.getString("id"), it.getString("name")) }
+          callback(players.right())
+        }
+      }
+    }
+  }
+
   fun findUserById(id: String): Kind<F, Option<Player>> = async { callback ->
     //language=PostgreSQL
     dbClient.queryWithParams("SELECT id, name FROM player WHERE id=?", json { listOf(id) }) { result ->

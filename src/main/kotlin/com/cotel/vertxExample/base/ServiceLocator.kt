@@ -4,6 +4,7 @@ import arrow.effects.DeferredK
 import arrow.effects.ForDeferredK
 import arrow.effects.applicativeError
 import arrow.effects.async
+import arrow.effects.monadDefer
 import arrow.effects.monadError
 import com.cotel.vertxExample.books.storage.BooksDAO
 import com.cotel.vertxExample.books.usecases.AddBook
@@ -16,6 +17,7 @@ import com.cotel.vertxExample.match.usecases.CreateRound
 import com.cotel.vertxExample.match.usecases.FindMatchById
 import com.cotel.vertxExample.players.storage.PlayersDAO
 import com.cotel.vertxExample.players.usecases.FindPlayerById
+import com.cotel.vertxExample.players.usecases.GetAllPlayers
 import io.vertx.core.Vertx
 import io.vertx.ext.jdbc.JDBCClient
 import org.koin.dsl.module.module
@@ -33,6 +35,7 @@ val mainModule = { vertx: Vertx ->
 
       module("players") {
         factory { FindPlayerById<ForDeferredK>(get(), DeferredK.applicativeError()) }
+        factory { GetAllPlayers<ForDeferredK>(get(), DeferredK.monadDefer()) }
       }
 
       module("matches") {
