@@ -4,6 +4,7 @@ import arrow.core.Try
 import arrow.core.recover
 import arrow.effects.ForDeferredK
 import arrow.effects.fix
+import arrow.effects.unsafeAttemptSync
 import com.cotel.vertxExample.base.Controller
 import com.cotel.vertxExample.base.bodyAsJson
 import com.cotel.vertxExample.match.model.CreateMatchRequest
@@ -11,6 +12,7 @@ import com.cotel.vertxExample.match.model.CreateRoundRequest
 import com.cotel.vertxExample.match.usecases.CreateMatch
 import com.cotel.vertxExample.match.usecases.CreateRound
 import com.cotel.vertxExample.match.usecases.FindMatchById
+import com.cotel.vertxExample.match.usecases.FinishMatch
 import io.vertx.ext.web.Router
 import io.vertx.ext.web.RoutingContext
 import io.vertx.kotlin.coroutines.dispatcher
@@ -23,11 +25,13 @@ class MatchController(router: Router) : Controller {
   private val findMatchById: FindMatchById<ForDeferredK> by inject()
   private val createMatch: CreateMatch<ForDeferredK> by inject()
   private val createRound: CreateRound<ForDeferredK> by inject()
+  private val finishMatch: FinishMatch<ForDeferredK> by inject()
 
   init {
     with(router) {
       get("/matches/:id").handler(::matchDetails)
       post("/matches").handler(::createMatch)
+      put("/matches/:id/finish").handler(::finishMatch)
       post("/matches/:id/rounds").handler(::createRoundForMatch)
     }
   }
@@ -72,6 +76,27 @@ class MatchController(router: Router) : Controller {
 
         }.recover {
           endWithBadRequestError("Could not parse request body")
+        }
+      }
+    }
+  }
+
+  private fun finishMatch(routingContext: RoutingContext) {
+    GlobalScope.launch(routingContext.vertx().dispatcher()) {
+      with(routingContext.response()) {
+        Try {
+          val id = routingContext.request().getParam("id")
+
+          finishMatch.execute(id, System.currentTimeMillis()).fix().unsafeAttemptSync()
+            .fold(
+              {
+                when (it) {
+                  is FinishMatch.Errors.MatchNotFound -> endWithNotFoundError("Match with id ${it.id} does not exist")
+                  else -> endWithInternalServerError("Persistence error")
+                }
+              },
+              { endWithJson(it) }
+            )
         }
       }
     }

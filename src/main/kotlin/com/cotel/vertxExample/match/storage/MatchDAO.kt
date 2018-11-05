@@ -123,4 +123,24 @@ class MatchDAO<F>(
     }
   }
 
+  fun updateMatch(match: Match): Kind<F, Match> = async { callback ->
+    dbClient.getConnection { result ->
+      if (result.failed()) callback(Exception(result.cause()).left())
+      else {
+        val connection = result.result()
+        //language=PostgreSQL
+        connection.execute("""
+          UPDATE match SET ending_date = ${match.endingDate} WHERE match.id = '${match.id}'
+        """.trimIndent()) { result ->
+          if (result.failed()) callback(Exception(result.cause()).left())
+          else {
+            callback(match.right())
+          }
+
+          connection.close { }
+        }
+      }
+    }
+  }
+
 }

@@ -15,6 +15,7 @@ import com.cotel.vertxExample.match.storage.RoundDAO
 import com.cotel.vertxExample.match.usecases.CreateMatch
 import com.cotel.vertxExample.match.usecases.CreateRound
 import com.cotel.vertxExample.match.usecases.FindMatchById
+import com.cotel.vertxExample.match.usecases.FinishMatch
 import com.cotel.vertxExample.players.storage.PlayersDAO
 import com.cotel.vertxExample.players.usecases.FindPlayerById
 import com.cotel.vertxExample.players.usecases.GetAllPlayers
@@ -42,6 +43,7 @@ val mainModule = { vertx: Vertx ->
         factory { FindMatchById<ForDeferredK>(get(), DeferredK.applicativeError()) }
         factory { CreateMatch<ForDeferredK>(get(), get(), DeferredK.monadError()) }
         factory { CreateRound<ForDeferredK>(get(), get(), get(), DeferredK.monadError()) }
+        factory { FinishMatch<ForDeferredK>(get(), DeferredK.monadDefer()) }
       }
     }
   }

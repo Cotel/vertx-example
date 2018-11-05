@@ -8,6 +8,7 @@ import arrow.core.right
 import arrow.typeclasses.MonadError
 import arrow.typeclasses.binding
 import com.cotel.vertxExample.match.model.CreateRoundRequest
+import com.cotel.vertxExample.match.model.Match
 import com.cotel.vertxExample.match.model.Round
 import com.cotel.vertxExample.match.storage.MatchDAO
 import com.cotel.vertxExample.match.storage.RoundDAO
@@ -22,6 +23,7 @@ class CreateRound<F>(
   sealed class Errors {
     class PlayerNotFound(val id: String) : Errors()
     class MatchNotFound(val id: String) : Errors()
+    object MatchIsFinished : Errors()
     object InvalidDraw : Errors()
     object InvalidScore : Errors()
     object MoreThanOneBolloOrDraw : Errors()
@@ -29,36 +31,41 @@ class CreateRound<F>(
   }
 
   fun execute(matchId: String, createRoundRequest: CreateRoundRequest): Kind<F, Either<Errors, Round>> = binding {
-    if (!isValidDraw(createRoundRequest)) Errors.InvalidDraw.left()
-    if (!areScoresValid(createRoundRequest)) Errors.InvalidScore.left()
-    if (!thereIsOnlyOneBolloOrDraw(createRoundRequest)) Errors.MoreThanOneBolloOrDraw.left()
+    matchDAO.findMatchById(matchId).bind()
+      .toEither { Errors.MatchNotFound(matchId) }
+      .flatMap { match ->
 
-    val match = matchDAO.findMatchById(matchId).bind()
-    if (match.isEmpty()) Errors.MatchNotFound(matchId).left()
+        if (!isValidDraw(createRoundRequest)) Errors.InvalidDraw.left()
+        else if (!areScoresValid(createRoundRequest)) Errors.InvalidScore.left()
+        else if (!thereIsOnlyOneBolloOrDraw(createRoundRequest)) Errors.MoreThanOneBolloOrDraw.left()
+        else if (match.isFinished()) Errors.MatchIsFinished.left()
+        else {
 
-    val fetchPlayer = { playerId: String ->
-      playersDAO.findUserById(playerId).map { it.toEither { Errors.PlayerNotFound(playerId) } }
-    }
-    val leftPlayer = fetchPlayer(createRoundRequest.leftPlayerId).bind()
-    val rightPlayer = fetchPlayer(createRoundRequest.rightPlayerId).bind()
+          val fetchPlayer = { playerId: String ->
+            playersDAO.findUserById(playerId).map { it.toEither { Errors.PlayerNotFound(playerId) } }
+          }
+          val leftPlayer = fetchPlayer(createRoundRequest.leftPlayerId).bind()
+          val rightPlayer = fetchPlayer(createRoundRequest.rightPlayerId).bind()
 
-    val roundId = roundDAO.createRound(matchId, createRoundRequest).bind()
+          val roundId = roundDAO.createRound(matchId, createRoundRequest).bind()
 
-    leftPlayer.flatMap { leftPlayer ->
-      rightPlayer.flatMap { rightPlayer ->
-        Round(
-          roundId,
-          matchId,
-          leftPlayer,
-          rightPlayer,
-          createRoundRequest.leftScore,
-          createRoundRequest.rightScore,
-          createRoundRequest.draw,
-          createRoundRequest.leftBollo,
-          createRoundRequest.rightBollo
-        ).right()
+          leftPlayer.flatMap { leftPlayer ->
+            rightPlayer.flatMap { rightPlayer ->
+              Round(
+                roundId,
+                matchId,
+                leftPlayer,
+                rightPlayer,
+                createRoundRequest.leftScore,
+                createRoundRequest.rightScore,
+                createRoundRequest.draw,
+                createRoundRequest.leftBollo,
+                createRoundRequest.rightBollo
+              ).right()
+            }
+          }
+        }
       }
-    }
   }.handleError { Errors.PersistenceError.left() }
 
   private fun isValidDraw(createRoundRequest: CreateRoundRequest): Boolean =
@@ -70,6 +77,8 @@ class CreateRound<F>(
     val isValidScore = { x: Int -> x in 0..5 }
     return isValidScore(createRoundRequest.leftScore) && isValidScore(createRoundRequest.rightScore)
   }
+
+  private fun Match.isFinished(): Boolean = endingDate != 0L
 
   private fun thereIsOnlyOneBolloOrDraw(createRoundRequest: CreateRoundRequest): Boolean =
     listOf(createRoundRequest.draw, createRoundRequest.leftBollo, createRoundRequest.rightBollo)
